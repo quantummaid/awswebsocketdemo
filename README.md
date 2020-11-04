@@ -37,6 +37,11 @@ export CLIENT_ID="testclient"
 ./scripts/trigger_event.sh
 ```
 
+### Trigger fake event with an invalid client id
+```bash
+CLIENT_ID="x" ./scripts/trigger_event.sh
+```
+
 ### Disconnect all clients
 ```bash
 ./scripts/disconnect_clients.sh
