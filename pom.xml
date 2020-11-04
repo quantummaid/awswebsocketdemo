@@ -7,22 +7,23 @@
     <version>0.1</version>
     <packaging>pom</packaging>
 
-    <properties>
-        <kotlin-version>1.4.10</kotlin-version>
-        <kotlin-logging.version>1.12.0</kotlin-logging.version>
-        <aws-sdk-version>2.14.28</aws-sdk-version>
-        <junit-version>5.7.0</junit-version>
-        <httpmaid-version>0.9.99</httpmaid-version>
-        <maven-surfire-plugin-version>3.0.0-M5</maven-surfire-plugin-version>
-        <jvm-target-version>1.8</jvm-target-version>
-        <dependency-update-file-checksum>3c917f29727fcfb2b50ed3ccaad4a495</dependency-update-file-checksum>
-        <plugin-update-file-checksum>a00df649d98d018317215aab7eab9066</plugin-update-file-checksum>
-    </properties>
-
     <modules>
         <module>server</module>
         <module>client</module>
     </modules>
+
+    <properties>
+        <kotlin-version>1.4.20-RC</kotlin-version>
+        <kotlin-logging.version>1.12.0</kotlin-logging.version>
+        <aws-sdk-version>2.15.18</aws-sdk-version>
+        <junit-version>5.7.0</junit-version>
+        <httpmaid-version>0.9.101</httpmaid-version>
+        <quantummaid-version>1.0.73</quantummaid-version>
+        <maven-surfire-plugin-version>3.0.0-M5</maven-surfire-plugin-version>
+        <jvm-target-version>1.8</jvm-target-version>
+        <dependency-update-file-checksum>a949b51c3f94b8f3e02a109cd954d9a5</dependency-update-file-checksum>
+        <plugin-update-file-checksum>d25694f9d0674135a9b37b909e84d640</plugin-update-file-checksum>
+    </properties>
 
     <build>
         <sourceDirectory>src/main/kotlin</sourceDirectory>

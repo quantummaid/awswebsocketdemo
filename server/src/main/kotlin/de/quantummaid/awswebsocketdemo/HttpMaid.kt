@@ -1,14 +1,12 @@
 package de.quantummaid.awswebsocketdemo
 
 import de.quantummaid.awswebsocketdemo.usecases.*
-import de.quantummaid.httpmaid.HttpMaid
-import de.quantummaid.httpmaid.HttpMaid.anHttpMaid
 import de.quantummaid.httpmaid.HttpMaidBuilder
 import de.quantummaid.httpmaid.mapmaid.MapMaidConfigurators.toConfigureMapMaidUsingRecipe
 import de.quantummaid.httpmaid.websockets.criteria.WebsocketCriteria.websocketCriteria
 
-fun httpMaid(configurator: (HttpMaidBuilder) -> Unit = {}): HttpMaid {
-    return anHttpMaid()
+fun configureHttpMaid(builder: HttpMaidBuilder) {
+    builder
             .post("/disconnect_everyone") { request, _ ->
                 request.websockets().disconnector().disconnectAll()
             }
@@ -26,6 +24,4 @@ fun httpMaid(configurator: (HttpMaidBuilder) -> Unit = {}): HttpMaid {
             .configured(toConfigureMapMaidUsingRecipe {
                 it.withExceptionIndicatingValidationError(ValidationException::class.java)
             })
-            .also(configurator::invoke)
-            .build()
 }

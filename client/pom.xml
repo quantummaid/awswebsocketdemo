@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>awswebsocketdemo</artifactId>
         <groupId>de.quantummaid.awswebsocketdemo</groupId>
+        <artifactId>awswebsocketdemo</artifactId>
         <version>0.1</version>
     </parent>
 
@@ -12,7 +12,7 @@
     <version>0.1</version>
 
     <properties>
-        <kotlin-version>1.4.10</kotlin-version>
+        <kotlin-version>1.4.20-RC</kotlin-version>
         <kotlin-logging.version>1.12.0</kotlin-logging.version>
         <dependency-update-file-checksum>3c917f29727fcfb2b50ed3ccaad4a495</dependency-update-file-checksum>
         <plugin-update-file-checksum>a00df649d98d018317215aab7eab9066</plugin-update-file-checksum>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
-            <version>1.4.10</version>
+            <version>1.4.20-RC</version>
         </dependency>
         <dependency>
             <groupId>io.github.microutils</groupId>

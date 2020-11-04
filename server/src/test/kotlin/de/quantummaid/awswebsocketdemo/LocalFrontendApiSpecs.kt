@@ -1,6 +1,7 @@
 package de.quantummaid.awswebsocketdemo
 
 import de.quantummaid.awswebsocketdemo.util.FreePortPool
+import de.quantummaid.httpmaid.HttpMaid.anHttpMaid
 import de.quantummaid.httpmaid.client.HttpMaidClient.aHttpMaidClientForTheHost
 import de.quantummaid.httpmaid.jetty.JettyEndpoint
 import de.quantummaid.httpmaid.jetty.JettyWebsocketEndpoint.jettyWebsocketEndpoint
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolver
 
 @ExtendWith(LocalFrontendApiSpecs::class)
-class LocalFrontendApiSpecs : ParameterResolver {
+class LocalFrontendApiSpecs : FrontendApiSpecs(), ParameterResolver {
 
     override fun supportsParameter(
         p0: ParameterContext?,
@@ -32,7 +33,7 @@ class LocalFrontendApiSpecs : ParameterResolver {
 
     private fun init() {
         val port = FreePortPool.freePort()
-        val httpMaid = httpMaid()
+        val httpMaid = anHttpMaid().apply { configureHttpMaid(this) }.build()
         endpoint = jettyWebsocketEndpoint(httpMaid, port)
         val client = aHttpMaidClientForTheHost("localhost")
             .withThePort(port)
