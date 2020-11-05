@@ -5,8 +5,9 @@ import org.eclipse.jetty.websocket.client.ClientUpgradeRequest
 import org.eclipse.jetty.websocket.client.WebSocketClient
 import java.net.URI
 
-class CommandLineInterface(val url: String,
-                           val clientId: String) : AutoCloseable {
+class CommandLineInterface(private val url: String,
+                           private val clientId: String,
+                           private val clientGroup: String) : AutoCloseable {
     private var client: WebSocketClient? = null
 
     fun reconnect() {
@@ -17,8 +18,7 @@ class CommandLineInterface(val url: String,
     fun connect() {
         client = WebSocketClient()
         client?.start()
-        val uri = URI("$url?clientId=$clientId")
-        //val uri = URI(url)
+        val uri = URI("$url?clientId=$clientId&clientGroup=$clientGroup")
         val request = ClientUpgradeRequest()
         val cliWebSocketListener = CliWebSocketListener(this)
         client?.connect(cliWebSocketListener, uri, request)
@@ -30,8 +30,8 @@ class CommandLineInterface(val url: String,
     }
 
     companion object {
-        fun startCommandLineInterface(url: String, clientId: String): CommandLineInterface {
-            val commandLineInterface = CommandLineInterface(url, clientId)
+        fun startCommandLineInterface(url: String, clientId: String, clientGroup: String): CommandLineInterface {
+            val commandLineInterface = CommandLineInterface(url, clientId, clientGroup)
             commandLineInterface.connect()
             return commandLineInterface
         }
@@ -40,5 +40,5 @@ class CommandLineInterface(val url: String,
 
 
 fun main() {
-    startCommandLineInterface("ws://localhost:8080/", "myClient")
+    startCommandLineInterface("ws://localhost:8080/", "myClient", "C0d3rs")
 }

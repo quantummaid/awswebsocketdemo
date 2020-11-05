@@ -21,6 +21,17 @@ fun configureHttpMaid(builder: HttpMaidBuilder) {
                     }
                 }
             }
+            .post("/broadcast_event", BroadcastEventUseCase::class.java)
+            .broadcastToWebsocketsUsing(EventBroadcaster::class.java, BroadcastEvent::class.java) {
+                object : EventBroadcaster {
+                    override fun dispatchTo(clientGroup: ClientGroup, event: BroadcastEvent) {
+                        it.sendTo(
+                                event,
+                                websocketCriteria().queryParameter("clientGroup", clientGroup.value)
+                        )
+                    }
+                }
+            }
             .configured(toConfigureMapMaidUsingRecipe {
                 it.withExceptionIndicatingValidationError(ValidationException::class.java)
             })

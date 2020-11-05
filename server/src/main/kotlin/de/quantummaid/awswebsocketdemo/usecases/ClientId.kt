@@ -1,9 +1,7 @@
 package de.quantummaid.awswebsocketdemo.usecases
 
-class ValidationException(message: String) : Exception(message)
-
-const val MIN_LENGTH = 3
-const val MAX_LENGTH = 70
+private const val MIN_LENGTH = 3
+private const val MAX_LENGTH = 70
 
 data class ClientId(val value: String) {
     init {

@@ -14,6 +14,7 @@ class CommandLineInterfaceSpecs {
     @Test
     fun cliCanConnect() {
         val clientId = UUID.randomUUID().toString()
+        val clientGroup = "c0d3rs"
 
         val httpMaid = anHttpMaid()
                 .post("/publish") { request, response ->
@@ -33,7 +34,7 @@ class CommandLineInterfaceSpecs {
 
             val url = "ws://localhost:$port/"
             println(url)
-            startCommandLineInterface(url, clientId)
+            startCommandLineInterface(url, clientId, clientGroup)
 
             httpMaidClient.issue(aPostRequestToThePath("/publish"))
 
@@ -44,6 +45,7 @@ class CommandLineInterfaceSpecs {
     @Test
     fun cliCanReconnect() {
         val clientId = UUID.randomUUID().toString()
+        val clientGroup = "c0d3rs"
 
         val httpMaid = anHttpMaid()
                 .post("/publish") { request, response ->
@@ -66,7 +68,7 @@ class CommandLineInterfaceSpecs {
 
             val url = "ws://localhost:$port/"
             println(url)
-            startCommandLineInterface(url, clientId)
+            startCommandLineInterface(url, clientId, clientGroup)
             for (i in 1..10) {
                 Thread.sleep(1000)
                 httpMaidClient.issue(aPostRequestToThePath("/disconnect"))

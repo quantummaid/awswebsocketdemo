@@ -19,8 +19,11 @@ class DemoClient : Callable<Int> {
     @Parameters(index = "1", description = ["client id"])
     lateinit var clientId: String
 
+    @Parameters(index = "2", description = ["client group"])
+    lateinit var clientGroup: String
+
     override fun call(): Int {
-        startCommandLineInterface(url, clientId)
+        startCommandLineInterface(url, clientId, clientGroup)
         Thread.sleep(1000 * 60 * 60)
         return 0
     }
