@@ -138,6 +138,21 @@ abstract class FrontendApiSpecs {
         Assertions.assertTrue(400 == response.statusCode) { response.statusCode.toString() }
         Assertions.assertTrue("""{"errors":[{"path":"clientId","message":"clientId must not be blank"}]}""" == response.body) { response.body }
     }
+
+    @Test
+    fun messageAndMotivationCannotBeNull(clients: Clients) {
+        val response = clients.httpClient.issue(
+                aPostRequestToThePath("/broadcast_event").withTheBody("""
+                {
+                    "clientGroup": "foo",
+                    "event": {
+                    }
+                }
+            """.trimIndent()))
+
+        Assertions.assertTrue(400 == response.statusCode) { response.statusCode.toString() }
+        Assertions.assertEquals("""{"errors":[{"path":"event","message":"message is required"},{"path":"event","message":"motivation is required"}]}""", response.body)
+    }
 }
 
 private fun createClientId(): String {

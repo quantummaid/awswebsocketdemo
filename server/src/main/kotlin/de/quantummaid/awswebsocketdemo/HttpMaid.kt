@@ -4,6 +4,7 @@ import de.quantummaid.awswebsocketdemo.usecases.*
 import de.quantummaid.httpmaid.HttpMaidBuilder
 import de.quantummaid.httpmaid.mapmaid.MapMaidConfigurators.toConfigureMapMaidUsingRecipe
 import de.quantummaid.httpmaid.websockets.criteria.WebsocketCriteria.websocketCriteria
+import de.quantummaid.mapmaid.mapper.deserialization.validation.ValidationError
 
 fun configureHttpMaid(builder: HttpMaidBuilder) {
     builder
@@ -33,6 +34,8 @@ fun configureHttpMaid(builder: HttpMaidBuilder) {
                 }
             }
             .configured(toConfigureMapMaidUsingRecipe {
-                it.withExceptionIndicatingValidationError(ValidationException::class.java)
+                it.withExceptionIndicatingMultipleValidationErrors(ValidationException::class.java) { exception, path ->
+                    exception.messages.map { ValidationError.fromStringMessageAndPropertyPath(it, path) }
+                }
             })
 }

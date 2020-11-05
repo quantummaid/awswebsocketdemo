@@ -1,3 +1,5 @@
 package de.quantummaid.awswebsocketdemo.usecases
 
-class ValidationException(message: String) : Exception(message)
+class ValidationException(val messages: List<String>) : Exception(messages.joinToString()) {
+    constructor(message: String) : this(listOf(message))
+}

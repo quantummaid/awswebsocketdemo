@@ -2,11 +2,15 @@ package de.quantummaid.awswebsocketdemo.usecases
 
 data class BroadcastEvent(val message: String?, val motivation: String?) {
     init {
+        val validations = mutableListOf<String>()
         if (message == null) {
-            throw ValidationException("message is required")
+            validations.add("message is required")
         }
         if (motivation == null) {
-            throw ValidationException("motivation is required")
+            validations.add("motivation is required")
+        }
+        if (!validations.isEmpty()) {
+            throw ValidationException(validations)
         }
     }
 }
