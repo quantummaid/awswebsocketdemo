@@ -1,6 +1,7 @@
 package de.quantummaid.awswebsocketdemo
 
 import de.quantummaid.awswebsocketdemo.util.waitFor
+import de.quantummaid.httpmaid.client.HttpClientRequest.aGetRequestToThePath
 import de.quantummaid.httpmaid.client.HttpClientRequest.aPostRequestToThePath
 import de.quantummaid.httpmaid.client.HttpMaidClient
 import org.junit.jupiter.api.Assertions
@@ -51,6 +52,33 @@ abstract class FrontendApiSpecs {
         Assertions.assertTrue(websocketResponse!!.contains(""""value1":"qwer"""")) { websocketResponse }
         Assertions.assertTrue(websocketResponse!!.contains(""""value2":"asdf"""")) { websocketResponse }
         Assertions.assertTrue(websocketResponse!!.contains(""""value3":"yxcv"""")) { websocketResponse }
+    }
+
+    @Test
+    fun eventsCanBeListed(clients: Clients) {
+        val clientId = createClientId()
+
+        val triggerResponse = clients.httpClient.issue(
+                aPostRequestToThePath("/trigger_event").withTheBody("""
+                {
+                    "clientId": "$clientId",
+                    "event": {
+                        "value1": "qwer",
+                        "value2": "asdf",
+                        "value3": "yxcv"
+                    }
+                }
+            """.trimIndent())
+        )
+
+        Assertions.assertEquals(200, triggerResponse.statusCode)
+
+        val listResponse = clients.httpClient.issue(aGetRequestToThePath("/list_events"))
+        Assertions.assertEquals(200, listResponse.statusCode)
+
+        Assertions.assertTrue(listResponse.body.contains(""""value1":"qwer"""")) { listResponse.body }
+        Assertions.assertTrue(listResponse.body.contains(""""value2":"asdf"""")) { listResponse.body }
+        Assertions.assertTrue(listResponse.body.contains(""""value3":"yxcv"""")) { listResponse.body }
     }
 
     @Test

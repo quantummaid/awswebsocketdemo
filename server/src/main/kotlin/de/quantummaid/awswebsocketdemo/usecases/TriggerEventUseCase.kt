@@ -6,11 +6,32 @@ interface EventDispatcher {
     fun dispatchTo(clientId: ClientId, event: FrontendEvent)
 }
 
-class TriggerEventUseCase {
+
+
+interface EventRepository {
+    fun loadAll(): List<FrontendEvent>
+
+    fun store(frontendEvent: FrontendEvent)
+}
+
+
+
+
+
+
+
+
+
+class TriggerEventUseCase(private val eventRepository: EventRepository) {
 
     fun triggerEvent(clientId: ClientId,
                      event: FrontendEvent,
                      eventDispatcher: EventDispatcher) {
         eventDispatcher.dispatchTo(clientId, event)
+        eventRepository.store(event)
     }
+}
+
+class ListEventsUseCase(private val eventRepository: EventRepository) {
+    fun listEvents() = eventRepository.loadAll()
 }

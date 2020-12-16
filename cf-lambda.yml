@@ -29,7 +29,23 @@ Resources:
   WebsocketRegistryTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: !Ref StackIdentifier
+      TableName: !Sub "${StackIdentifier}-WebsocketRegistry"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+
+  ################
+  ## Repository ##
+  ################
+
+  EventRepository:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "${StackIdentifier}-EventRepository"
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: "id"
@@ -57,7 +73,7 @@ Resources:
                   - sts:AssumeRole
                 Resource: '*'
                 Effect: Allow
-        - PolicyName: !Sub "${StackIdentifier}-UseDBPolicy"
+        - PolicyName: !Sub "${StackIdentifier}-UseDBPolicy-WebsocketRegistry"
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
@@ -69,6 +85,19 @@ Resources:
                   - 'dynamodb:Scan'
                   - 'dynamodb:UpdateItem'
                 Resource: !Join ['', ["arn:aws:dynamodb:", !Sub "${AWS::Region}", ":", !Sub "${AWS::AccountId}", ":table/", !Ref WebsocketRegistryTable]]
+                Effect: Allow
+        - PolicyName: !Sub "${StackIdentifier}-UseDBPolicy-EventRepository"
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Action:
+                  - 'dynamodb:DeleteItem'
+                  - 'dynamodb:GetItem'
+                  - 'dynamodb:PutItem'
+                  - 'dynamodb:Query'
+                  - 'dynamodb:Scan'
+                  - 'dynamodb:UpdateItem'
+                Resource: !Join ['', ["arn:aws:dynamodb:", !Sub "${AWS::Region}", ":", !Sub "${AWS::AccountId}", ":table/", !Ref EventRepository]]
                 Effect: Allow
         - PolicyName: !Sub "${StackIdentifier}-Logging"
           PolicyDocument:
@@ -127,6 +156,7 @@ Resources:
       Environment:
         Variables:
           WEBSOCKET_REGISTRY_TABLE: !Ref WebsocketRegistryTable
+          EVENT_REPOSITORY_TABLE: !Ref EventRepository
 
   ###########################
   # Shared API Gateway setup
@@ -189,7 +219,7 @@ Resources:
       - HttpMaidHttpApiWithV1PayloadsDefaultIntegration
     Properties:
       ApiId: !Ref HttpMaidHttpApiWithV1Payloads
-      RouteKey: 'POST /{proxy+}'
+      RouteKey: 'ANY /{proxy+}'
       Target: !Join ['/', [integrations, !Ref HttpMaidHttpApiWithV1PayloadsDefaultIntegration]]
       AuthorizationType: NONE
 

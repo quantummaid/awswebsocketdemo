@@ -13,7 +13,7 @@ import java.util.*
 const val BUCKET_CF_TEMPLATE = "/cf-bucket.yml"
 const val LAMBDA_CF_TEMPLATE = "/cf-lambda.yml"
 const val JAR = "/server/target/awswebsocketdemo-lambda.jar"
-const val PREFIX = "quantummaid-awswebsocketdemo-test"
+const val PREFIX = "awswebsocketdemo-tests"
 
 const val HTTP_API_NAME = "AWS Websocket Demo Http Lambda Proxy"
 const val WEBSOCKET_API_NAME = "AWS Websocket Demo WebSockets Lambda Proxy"

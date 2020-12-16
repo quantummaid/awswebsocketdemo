@@ -12,6 +12,7 @@ fun configureHttpMaid(builder: HttpMaidBuilder) {
                 request.websockets().disconnector().disconnectAll()
             }
             .post("/trigger_event", TriggerEventUseCase::class.java)
+            .get("/list_events", ListEventsUseCase::class.java)
             .broadcastToWebsocketsUsing(EventDispatcher::class.java, FrontendEvent::class.java) {
                 object : EventDispatcher {
                     override fun dispatchTo(clientId: ClientId, event: FrontendEvent) {

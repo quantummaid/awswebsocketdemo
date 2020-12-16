@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ParameterResolver
 const val HTTPS_PORT = 443
 
 @ExtendWith(RemoteFrontendApiSpecs::class)
-class RemoteFrontendApiSpecs : ParameterResolver {
+class RemoteFrontendApiSpecs : ParameterResolver, FrontendApiSpecs() {
 
     override fun supportsParameter(
         p0: ParameterContext?,

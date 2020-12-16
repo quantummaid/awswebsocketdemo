@@ -19,6 +19,7 @@
         <junit-version>5.7.0</junit-version>
         <httpmaid-version>0.9.101</httpmaid-version>
         <quantummaid-version>1.0.73</quantummaid-version>
+        <mapmaid-version>0.9.100</mapmaid-version>
         <maven-surfire-plugin-version>3.0.0-M5</maven-surfire-plugin-version>
         <jvm-target-version>1.8</jvm-target-version>
         <dependency-update-file-checksum>a949b51c3f94b8f3e02a109cd954d9a5</dependency-update-file-checksum>
