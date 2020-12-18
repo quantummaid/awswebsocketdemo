@@ -1,32 +1,13 @@
 package de.quantummaid.awswebsocketdemo
 
-import de.quantummaid.awswebsocketdemo.usecases.BroadcastEventUseCase
 import de.quantummaid.awswebsocketdemo.usecases.EventRepository
-import de.quantummaid.awswebsocketdemo.usecases.ListEventsUseCase
-import de.quantummaid.awswebsocketdemo.usecases.TriggerEventUseCase
-import de.quantummaid.awswebsocketdemo.util.FreePortPool
-import de.quantummaid.httpmaid.HttpMaid.anHttpMaid
-import de.quantummaid.httpmaid.client.HttpMaidClient.aHttpMaidClientForTheHost
-import de.quantummaid.httpmaid.jetty.JettyEndpoint
-import de.quantummaid.httpmaid.jetty.JettyWebsocketEndpoint.jettyWebsocketEndpoint
-import de.quantummaid.httpmaid.usecases.UseCaseConfigurators.toCreateUseCaseInstancesUsing
-import de.quantummaid.httpmaid.usecases.instantiation.UseCaseInstantiator
+import de.quantummaid.injectmaid.api.ReusePolicy
+import de.quantummaid.quantummaid.integrations.testmonolambda.TestMonoLambda
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolver
-
-class PlaceholderInjector(val eventRepository: EventRepository) : UseCaseInstantiator {
-    override fun <T : Any?> instantiate(type: Class<T>?): T {
-        return when (type) {
-            TriggerEventUseCase::class.java -> TriggerEventUseCase(eventRepository)
-            BroadcastEventUseCase::class.java -> BroadcastEventUseCase()
-            ListEventsUseCase::class.java -> ListEventsUseCase(eventRepository)
-            else -> throw UnsupportedOperationException("unsupported type $type")
-        } as T
-    }
-}
 
 @ExtendWith(LocalFrontendApiSpecs::class)
 class LocalFrontendApiSpecs : FrontendApiSpecs(), ParameterResolver {
@@ -49,22 +30,23 @@ class LocalFrontendApiSpecs : FrontendApiSpecs(), ParameterResolver {
     }
 
     private fun init() {
-        val port = FreePortPool.freePort()
-        val eventRepository = InMemoryEventRepository()
-        val httpMaid = anHttpMaid()
-                .configured(toCreateUseCaseInstancesUsing(PlaceholderInjector(eventRepository)))
-                .apply { configureHttpMaid(this) }
+        endpoint = TestMonoLambda.aTestMonoLambda()
+                .withHttpMaid {
+                    configureHttpMaid(it)
+                }
+                .withInjectMaid {
+                    it.withImplementation(
+                            EventRepository::class.java,
+                            InMemoryEventRepository::class.java,
+                            ReusePolicy.EAGER_SINGLETON)
+                }
                 .build()
-        endpoint = jettyWebsocketEndpoint(httpMaid, port)
-        val client = aHttpMaidClientForTheHost("localhost")
-                .withThePort(port)
-                .viaHttp()
-                .build()
+        val client = endpoint!!.connectClient()
         clients = Clients(client, client)
     }
 
     companion object {
-        var endpoint: JettyEndpoint? = null
+        var endpoint: TestMonoLambda? = null
         var clients: Clients? = null
 
         @AfterAll

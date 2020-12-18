@@ -18,7 +18,8 @@ class Lambda {
         fun createMonoLambda(): MonoLambda {
             val websocketRegistryTable = System.getenv("WEBSOCKET_REGISTRY_TABLE")
             val eventRepositoryTable = System.getenv("EVENT_REPOSITORY_TABLE")
-            return MonoLambda.aMonoLambda()
+            val region = System.getenv("AWS_REGION")
+            return MonoLambda.aMonoLambdaInRegion(region)
                     .withHttpMaid {
                         configureHttpMaid(it)
                         val dynamoDbRepository = DynamoDbRepository.dynamoDbRepository(websocketRegistryTable, "id")
