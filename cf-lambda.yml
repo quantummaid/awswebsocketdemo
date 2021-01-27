@@ -278,6 +278,15 @@ Resources:
       RouteResponseSelectionExpression: $default
       Target: !Join ['/', [integrations, !Ref HttpMaidWebsocketsApiConnectIntegration]] # See below
 
+  HttpMaidWebsocketsApiDisconnectRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpMaidWebsocketsApi
+      RouteKey: $disconnect
+      AuthorizationType: NONE
+      RouteResponseSelectionExpression: $default
+      Target: !Join ['/', [integrations, !Ref HttpMaidWebsocketsApiConnectIntegration]] # See below
+
   HttpMaidWebsocketsApiConnectIntegration:
     Type: AWS::ApiGatewayV2::Integration
     Properties:
@@ -316,6 +325,7 @@ Resources:
     DependsOn:
       - HttpMaidWebsocketsApiDefaultRoute
       - HttpMaidWebsocketsApiConnectRoute
+      - HttpMaidWebsocketsApiDisconnectRoute
       - HttpMaidWebsocketsApiDefaultResponse
     Properties:
       ApiId: !Ref HttpMaidWebsocketsApi
