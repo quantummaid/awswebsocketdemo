@@ -2,6 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>de.quantummaid</groupId>
+        <artifactId>quantummaid-opensource-parent</artifactId>
+        <version>0.9.79</version>
+    </parent>
+
     <groupId>de.quantummaid.awswebsocketdemo</groupId>
     <artifactId>awswebsocketdemo</artifactId>
     <version>0.1</version>
@@ -13,16 +19,15 @@
     </modules>
 
     <properties>
-        <kotlin-version>1.4.20-RC</kotlin-version>
-        <kotlin-logging.version>1.12.0</kotlin-logging.version>
-        <aws-sdk-version>2.15.18</aws-sdk-version>
-        <junit-version>5.7.0</junit-version>
-        <httpmaid-version>0.9.110</httpmaid-version>
-        <quantummaid-version>1.0.81</quantummaid-version>
+        <kotlin-version>1.4.32</kotlin-version>
+        <kotlin-logging.version>1.12.5</kotlin-logging.version>
+        <aws-sdk-version>2.16.59</aws-sdk-version>
+        <junit-version>5.7.1</junit-version>
+        <quantummaid-version>1.0.104</quantummaid-version>
         <mapmaid-version>0.9.100</mapmaid-version>
         <maven-surfire-plugin-version>3.0.0-M5</maven-surfire-plugin-version>
         <jvm-target-version>1.8</jvm-target-version>
-        <dependency-update-file-checksum>a949b51c3f94b8f3e02a109cd954d9a5</dependency-update-file-checksum>
+        <dependency-update-file-checksum>25406c206c1aa1b1bf5c2a46ccadcfe6</dependency-update-file-checksum>
         <plugin-update-file-checksum>d25694f9d0674135a9b37b909e84d640</plugin-update-file-checksum>
     </properties>
 

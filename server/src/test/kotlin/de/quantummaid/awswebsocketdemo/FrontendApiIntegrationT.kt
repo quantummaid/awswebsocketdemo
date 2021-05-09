@@ -15,7 +15,7 @@ data class Clients(
         val websocketClient: HttpMaidClient
 )
 
-abstract class FrontendApiSpecs {
+abstract class FrontendApiIntegrationT {
 
     @Test
     fun eventsCanBeTriggered(clients: Clients) {

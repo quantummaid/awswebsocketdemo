@@ -149,10 +149,10 @@ Resources:
         - Key: StackIdentifier
           Value: !Ref StackIdentifier
       MemorySize: 512
-      Handler: de.quantummaid.awswebsocketdemo.Lambda::handleRequest
+      Runtime: provided
+      Handler: thisisignored
       Role: !GetAtt FunctionRole.Arn
       Timeout: 20
-      Runtime: java11
       Environment:
         Variables:
           WEBSOCKET_REGISTRY_TABLE: !Ref WebsocketRegistryTable
@@ -348,6 +348,11 @@ Outputs:
       Name: !Sub ${StackIdentifier}-http-endpoint
 
   WebSocketEndpoint:
-    Value: !Sub ${HttpMaidWebsocketsApi.ApiEndpoint}/${HttpMaidWebsocketsApiStage}
+    Value: !Sub ${HttpMaidWebsocketsApi.ApiEndpoint}
     Export:
       Name: !Sub ${StackIdentifier}-websocket-endpoint
+
+  WebSocketStage:
+    Value: !Ref HttpMaidWebsocketsApiStage
+    Export:
+      Name: !Sub ${StackIdentifier}-websocket-stage

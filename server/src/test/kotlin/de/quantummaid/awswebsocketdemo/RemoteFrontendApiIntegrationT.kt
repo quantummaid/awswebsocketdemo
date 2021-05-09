@@ -11,8 +11,8 @@ import org.junit.jupiter.api.extension.ParameterResolver
 
 const val HTTPS_PORT = 443
 
-@ExtendWith(RemoteFrontendApiSpecs::class)
-class RemoteFrontendApiSpecs : ParameterResolver, FrontendApiSpecs() {
+@ExtendWith(RemoteFrontendApiIntegrationT::class)
+class RemoteFrontendApiIntegrationT : ParameterResolver, FrontendApiIntegrationT() {
 
     override fun supportsParameter(
         p0: ParameterContext?,
@@ -36,15 +36,19 @@ class RemoteFrontendApiSpecs : ParameterResolver, FrontendApiSpecs() {
 
         val deployment = deployStack()
 
-        val httpClient = aHttpMaidClientForTheHost(deployment.httpApi.host())
+        val httpUrl = deployment.httpApi.replace("https://", "")
+        println("http endpoint url: $httpUrl")
+        val httpClient = aHttpMaidClientForTheHost(httpUrl)
             .withThePort(HTTPS_PORT)
             .viaHttps()
             .build()
 
-        val websocketClient = aHttpMaidClientForTheHost(deployment.websocketApi.host())
+        val websocketUrl = deployment.websocketApi.replace("wss://", "")
+        println("websocket endpoint url: $websocketUrl")
+        val websocketClient = aHttpMaidClientForTheHost(websocketUrl)
             .withThePort(HTTPS_PORT)
             .viaHttps()
-            .withBasePath(deployment.websocketApi.basePath())
+            .withBasePath("/" + deployment.websocketStage)
             .build()
 
         clients = Clients(httpClient, websocketClient)

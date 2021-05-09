@@ -9,8 +9,8 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolver
 
-@ExtendWith(LocalFrontendApiSpecs::class)
-class LocalFrontendApiSpecs : FrontendApiSpecs(), ParameterResolver {
+@ExtendWith(LocalFrontendIntegrationT::class)
+class LocalFrontendIntegrationT : FrontendApiIntegrationT(), ParameterResolver {
 
     override fun supportsParameter(
             p0: ParameterContext?,

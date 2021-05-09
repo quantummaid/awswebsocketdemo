@@ -1,37 +1,52 @@
 package de.quantummaid.awswebsocketdemo
 
 import de.quantummaid.awswebsocketdemo.infrastructure.DynamoDbEventRepository.Companion.createDynamoDbEventRepository
+import de.quantummaid.awswebsocketdemo.infrastructure.RepositoryMapper
 import de.quantummaid.awswebsocketdemo.usecases.EventRepository
-import de.quantummaid.httpmaid.awslambda.registry.DynamoDbWebsocketRegistry
+import de.quantummaid.httpmaid.awslambda.registry.DynamoDbWebsocketRegistry.dynamoDbWebsocketRegistry
 import de.quantummaid.httpmaid.awslambda.repository.dynamodb.DynamoDbRepository
-import de.quantummaid.httpmaid.websockets.WebsocketConfigurators
-import de.quantummaid.httpmaid.websockets.registry.WebsocketRegistry
-import de.quantummaid.injectmaid.api.ReusePolicy.EAGER_SINGLETON
+import de.quantummaid.httpmaid.awslambda.sender.apigateway.sync.ApiGatewaySyncClientFactory
+import de.quantummaid.httpmaid.websockets.WebsocketConfigurators.toUseWebsocketRegistry
+import de.quantummaid.injectmaid.api.ReusePolicy.LAZY_SINGLETON
 import de.quantummaid.quantummaid.integrations.monolambda.MonoLambda
+import de.quantummaid.reflectmaid.ReflectMaid
+import software.amazon.awssdk.services.apigatewaymanagementapi.ApiGatewayManagementApiClient
+import java.net.URI
 
 class Lambda {
-    fun handleRequest(event: Map<String?, Any?>?) = MONO_LAMBDA.handleRequest(event)
 
     companion object {
-        private val MONO_LAMBDA = createMonoLambda()
-
         fun createMonoLambda(): MonoLambda {
-            val websocketRegistryTable = System.getenv("WEBSOCKET_REGISTRY_TABLE")
-            val eventRepositoryTable = System.getenv("EVENT_REPOSITORY_TABLE")
+            val reflectMaid = ReflectMaid.aReflectMaid()
             val region = System.getenv("AWS_REGION")
-            return MonoLambda.aMonoLambdaInRegion(region)
-                    .withHttpMaid {
-                        configureHttpMaid(it)
+            return createMonoLambda(reflectMaid, region)
+        }
+
+        fun createMonoLambda(
+            reflectMaid: ReflectMaid,
+            region: String
+        ): MonoLambda {
+            val repositoryMapper = RepositoryMapper.repositoryMapper(reflectMaid)
+            return MonoLambda.aMonoLambdaInRegion(reflectMaid, region)
+                .withHttpMaid {
+                    configureHttpMaid(it)
+                    it.disableStartupChecks()
+                    it.configured(toUseWebsocketRegistry {
+                        val websocketRegistryTable = System.getenv("WEBSOCKET_REGISTRY_TABLE")
                         val dynamoDbRepository = DynamoDbRepository.dynamoDbRepository(websocketRegistryTable, "id")
-                        val websocketRegistry: WebsocketRegistry = DynamoDbWebsocketRegistry.dynamoDbWebsocketRegistry(dynamoDbRepository)
-                        it.configured(WebsocketConfigurators.toUseWebsocketRegistry(websocketRegistry))
-                    }
-                    .withInjectMaid {
-                        it.withCustomType(EventRepository::class.java, {
-                            createDynamoDbEventRepository(eventRepositoryTable)
-                        }, EAGER_SINGLETON)
-                    }
-                    .build()
+                        dynamoDbWebsocketRegistry(dynamoDbRepository)
+                    })
+                }
+                .withApiGatewayClientFactory(ApiGatewaySyncClientFactory.syncApiGatewayClientFactory {
+                    ApiGatewayManagementApiClient.builder().endpointOverride(URI(it)).build()
+                })
+                .withInjectMaid {
+                    it.withCustomType(EventRepository::class.java, {
+                        val eventRepositoryTable = System.getenv("EVENT_REPOSITORY_TABLE")
+                        createDynamoDbEventRepository(eventRepositoryTable, repositoryMapper)
+                    }, LAZY_SINGLETON)
+                }
+                .build()
         }
     }
 }

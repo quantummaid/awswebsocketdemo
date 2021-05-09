@@ -12,36 +12,103 @@
     <version>0.1</version>
 
     <properties>
-        <dependency-update-file-checksum>3c917f29727fcfb2b50ed3ccaad4a495</dependency-update-file-checksum>
-        <plugin-update-file-checksum>a00df649d98d018317215aab7eab9066</plugin-update-file-checksum>
+        <dependency-update-file-checksum>42f33b16b7099885cd5becc23c104f35</dependency-update-file-checksum>
+        <plugin-update-file-checksum>915baffd77985e9da0d3cfee67e149eb</plugin-update-file-checksum>
         <slf4j-version>1.7.30</slf4j-version>
+        <skipgraal>false</skipgraal>
+        <spotbugs.excludeFilterFile>
+            ${project.basedir}/src/test/spotbugs/spotbugs-exclude.xml
+        </spotbugs.excludeFilterFile>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.microutils</groupId>
+                <artifactId>kotlin-logging</artifactId>
+                <version>${kotlin-logging.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcore</artifactId>
+                <version>4.4.14</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>2.12.3</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>2.12.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-bom</artifactId>
+                <version>${kotlin-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>4.1.63.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>${aws-sdk-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>de.quantummaid.quantummaid</groupId>
+                <artifactId>quantummaid-bom</artifactId>
+                <version>${quantummaid-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <version>${kotlin-version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
-            <version>1.4.20-RC</version>
         </dependency>
         <dependency>
             <groupId>io.github.microutils</groupId>
             <artifactId>kotlin-logging</artifactId>
-            <version>${kotlin-logging.version}</version>
         </dependency>
         <dependency>
             <groupId>de.quantummaid.quantummaid.integrations</groupId>
             <artifactId>quantummaid-monolambda</artifactId>
-            <version>${quantummaid-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.quantummaid.graalvmlambdaruntime</groupId>
+            <artifactId>core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>kotlin-stdlib-jdk8</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>de.quantummaid.mapmaid.integrations</groupId>
             <artifactId>mapmaid-dynamodb</artifactId>
-            <version>${mapmaid-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jetbrains.kotlin</groupId>
+                    <artifactId>kotlin-stdlib-jdk8</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -67,12 +134,11 @@
         <dependency>
             <groupId>de.quantummaid.quantummaid.integrations</groupId>
             <artifactId>quantummaid-testmonolambda</artifactId>
-            <version>${quantummaid-version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>de.quantummaid.httpmaid.integrations</groupId>
             <artifactId>httpmaid-jetty-websockets</artifactId>
-            <version>${httpmaid-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -82,40 +148,28 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit-version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>de.quantummaid.httpmaid.integrations</groupId>
             <artifactId>httpmaid-client</artifactId>
-            <version>${httpmaid-version}</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>s3</artifactId>
-            <version>${aws-sdk-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>cloudformation</artifactId>
-            <version>${aws-sdk-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>apigatewayv2</artifactId>
-            <version>${aws-sdk-version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>sts</artifactId>
-            <version>${aws-sdk-version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -123,19 +177,51 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <groupId>org.graalvm.nativeimage</groupId>
+                <artifactId>native-image-maven-plugin</artifactId>
+                <version>21.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>native-image</goal>
+                        </goals>
+                        <phase>package</phase>
+                    </execution>
+                </executions>
                 <configuration>
-                    <finalName>awswebsocketdemo-lambda</finalName>
-                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <skip>${skipgraal}</skip>
+                    <imageName>bootstrap</imageName>
+                    <mainClass>de.quantummaid.awswebsocketdemo.MainKt</mainClass>
+                    <buildArgs>
+                        <buildArg>-H:+ReportExceptionStackTraces</buildArg>
+                        <buildArg>-H:EnableURLProtocols=http</buildArg>
+                        <buildArg>--enable-https</buildArg>
+                        <buildArg>--no-fallback</buildArg>
+                        <buildArg>-H:+ReportUnsupportedElementsAtRuntime</buildArg>
+                        <buildArg>-H:+PrintClassInitialization</buildArg>
+                        <buildArg>--initialize-at-build-time</buildArg>
+                        <buildArg>--allow-incomplete-classpath</buildArg>
+                    </buildArgs>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
                         <goals>
-                            <goal>shade</goal>
+                            <goal>single</goal>
                         </goals>
+                        <configuration>
+                            <skipAssembly>${skipgraal}</skipAssembly>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>src/main/assembly/zip.xml</descriptor>
+                            </descriptors>
+                            <finalName>awswebsocketdemo-lambda</finalName>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -143,9 +229,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surfire-plugin-version}</version>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
                 <executions>
                     <execution>
                         <id>run-tests</id>
@@ -154,9 +237,8 @@
                             <goal>test</goal>
                         </goals>
                         <configuration>
-                            <skipTests>false</skipTests>
                             <includes>
-                                <include>**/*Specs.java</include>
+                                <include>**/*IntegrationT.java</include>
                             </includes>
                             <forkedProcessExitTimeoutInSeconds>600</forkedProcessExitTimeoutInSeconds>
                             <forkedProcessTimeoutInSeconds>0</forkedProcessTimeoutInSeconds>

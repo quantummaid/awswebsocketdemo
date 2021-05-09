@@ -1,31 +1,27 @@
 package de.quantummaid.awswebsocketdemo.util.aws.s3
 
-import mu.KLogger
-import mu.KotlinLogging
 import software.amazon.awssdk.services.s3.S3Client
 import software.amazon.awssdk.services.s3.model.*
 import java.io.File
 
 object S3Handler {
-    val log: KLogger = KotlinLogging.logger {}
-
     fun uploadToS3Bucket(
         bucketName: String,
         file: File
     ): String {
         val key = keyFromFile(file)
         S3Client.create().use { s3Client ->
-            log.info {
+            println(
                 "Checking for ${file.name} (size:${humanReadableByteCount(file.length(), si = false)}," +
-                    " parent:${file.parent}) at s3://$bucketName/$key..."
-            }
+                        " parent:${file.parent}) at s3://$bucketName/$key..."
+            )
 
 
             s3Client.listBuckets().buckets().also { print(it) }
             if (!fileNeedsUploading(bucketName, key, s3Client)) {
-                log.info("${file.name} (md5: $key) already present. not uploading.")
+                println("${file.name} (md5: $key) already present. not uploading.")
             } else {
-                log.info("${file.name} needs uploading. uploading...")
+                println("${file.name} needs uploading. uploading...")
                 s3Client.putObject(
                     PutObjectRequest.builder()
                         .bucket(bucketName)
@@ -33,7 +29,7 @@ object S3Handler {
                         .build(),
                     file.toPath()
                 )
-                log.info("Uploaded {} to S3 object {}/{}.", file, bucketName, key)
+                println("Uploaded $file to S3 object $bucketName/$key.")
             }
             return key
         }
@@ -109,13 +105,13 @@ object S3Handler {
         key: String,
         s3Client: S3Client
     ) {
-        log.info("Deleting S3 object {}/{}...", bucketName, key)
+        println("Deleting S3 object $bucketName/$key...")
         s3Client.deleteObject(
             DeleteObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
                 .build()
         )
-        log.info("Deleted S3 object {}/{}.", bucketName, key)
+        println("Deleted S3 object $bucketName/$key.")
     }
 }

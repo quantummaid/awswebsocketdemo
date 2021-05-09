@@ -1,8 +1,6 @@
 package de.quantummaid.awswebsocketdemo.util.aws.cloudformation
 
 import de.quantummaid.awswebsocketdemo.util.aws.cloudformation.Poller.pollWithTimeout
-import mu.KLogger
-import mu.KotlinLogging
 import software.amazon.awssdk.services.cloudformation.CloudFormationClient
 import software.amazon.awssdk.services.cloudformation.model.*
 import software.amazon.awssdk.services.cloudformation.model.Stack
@@ -13,14 +11,16 @@ import java.util.stream.Collectors
 
 class StackWaitWouldNeverCompleteException(private val msg: String) : RuntimeException(msg) {
     fun probablyExplainedBy(events: List<StackEvent>): StackUpdateFailedException {
-        val betterMsg = "$msg, probably explained by: ${events.joinToString(
-            prefix = "[\n- ",
-            separator = "\n- ",
-            postfix = "\n]",
-            transform = {
-                "${it.timestamp()} ${it.resourceStatusAsString()} for ${it.resourceType()}@${it.logicalResourceId()} because:${it.resourceStatusReason()}"
-            }
-        )}"
+        val betterMsg = "$msg, probably explained by: ${
+            events.joinToString(
+                prefix = "[\n- ",
+                separator = "\n- ",
+                postfix = "\n]",
+                transform = {
+                    "${it.timestamp()} ${it.resourceStatusAsString()} for ${it.resourceType()}@${it.logicalResourceId()} because:${it.resourceStatusReason()}"
+                }
+            )
+        }"
         return StackUpdateFailedException(betterMsg)
     }
 }
@@ -33,7 +33,6 @@ class StackUpdateFailedException(msg: String) : RuntimeException(msg)
  */
 object CloudFormationWaiter {
 
-    private val log: KLogger = KotlinLogging.logger {}
     private const val MAX_NUMBER_OF_TRIES = 60
     private const val SLEEP_TIME_IN_MILLISECONDS = 5000
 
@@ -145,23 +144,23 @@ object CloudFormationWaiter {
                 .map(Stack::stackStatus)
                 .map { stackStatus: Any ->
                     if (failureStates.contains(stackStatus)) {
-                        log.warn {
+                        println(
                             "Waiting for stack '$stackNameOrId' to reach '$successState' failed (current:'$stackStatus')"
-                        }
+                        )
                         throw StackWaitWouldNeverCompleteException("stack '$stackNameOrId' became '$stackStatus', would never reach the expected '$successState'")
                     } else {
                         val successStateHasBeenReached = successState == stackStatus
                         if (!successStateHasBeenReached) {
-                            log.info { "Waiting for stack '$stackNameOrId' to reach '$successState' (current:'$stackStatus')..." }
+                            println("Waiting for stack '$stackNameOrId' to reach '$successState' (current:'$stackStatus')...")
                             false
                         } else {
-                            log.info { "Done waiting for stack '$stackNameOrId' to reach '$successState'" }
+                            println("Done waiting for stack '$stackNameOrId' to reach '$successState'")
                             true
                         }
                     }
                 }
                 .orElseGet {
-                    log.info { "Waiting for stack '$stackNameOrId' to change state..." }
+                    println("Waiting for stack '$stackNameOrId' to change state...")
                     false
                 }
         }

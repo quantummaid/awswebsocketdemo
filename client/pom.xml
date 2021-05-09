@@ -12,12 +12,68 @@
     <version>0.1</version>
 
     <properties>
-        <kotlin-version>1.4.20-RC</kotlin-version>
-        <kotlin-logging.version>1.12.0</kotlin-logging.version>
-        <dependency-update-file-checksum>3c917f29727fcfb2b50ed3ccaad4a495</dependency-update-file-checksum>
-        <plugin-update-file-checksum>a00df649d98d018317215aab7eab9066</plugin-update-file-checksum>
+        <kotlin-version>1.4.32</kotlin-version>
+        <kotlin-logging.version>1.12.5</kotlin-logging.version>
+        <dependency-update-file-checksum>42f33b16b7099885cd5becc23c104f35</dependency-update-file-checksum>
+        <plugin-update-file-checksum>a9c106f16f2d959e2db68534062e7623</plugin-update-file-checksum>
+        <spotbugs.excludeFilterFile>
+            ${project.basedir}/src/test/spotbugs/spotbugs-exclude.xml
+        </spotbugs.excludeFilterFile>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.30</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-io</artifactId>
+                <version>9.4.40.v20210413</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-util</artifactId>
+                <version>9.4.40.v20210413</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-http</artifactId>
+                <version>9.4.40.v20210413</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty.websocket</groupId>
+                <artifactId>websocket-client</artifactId>
+                <version>9.4.40.v20210413</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty.websocket</groupId>
+                <artifactId>websocket-common</artifactId>
+                <version>9.4.40.v20210413</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty.websocket</groupId>
+                <artifactId>websocket-api</artifactId>
+                <version>9.4.40.v20210413</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-bom</artifactId>
+                <version>${kotlin-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>de.quantummaid.quantummaid</groupId>
+                <artifactId>quantummaid-bom</artifactId>
+                <version>${quantummaid-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -27,7 +83,7 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
-            <version>1.4.20-RC</version>
+            <version>${kotlin-version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.microutils</groupId>
@@ -37,18 +93,23 @@
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-client</artifactId>
-            <version>9.4.32.v20200930</version>
         </dependency>
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <version>4.5.2</version>
+            <version>4.6.1</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.3.0-alpha5</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -65,20 +126,39 @@
         <dependency>
             <groupId>de.quantummaid.httpmaid.integrations</groupId>
             <artifactId>httpmaid-jetty-websockets</artifactId>
-            <version>${httpmaid-version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>de.quantummaid.httpmaid</groupId>
             <artifactId>core</artifactId>
-            <version>${httpmaid-version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>de.quantummaid.httpmaid.integrations</groupId>
             <artifactId>httpmaid-client</artifactId>
-            <version>${httpmaid-version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
     </dependencies>
 
