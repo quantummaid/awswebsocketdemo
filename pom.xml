@@ -5,7 +5,7 @@
     <parent>
         <groupId>de.quantummaid</groupId>
         <artifactId>quantummaid-opensource-parent</artifactId>
-        <version>0.9.79</version>
+        <version>0.9.80</version>
     </parent>
 
     <groupId>de.quantummaid.awswebsocketdemo</groupId>
@@ -21,9 +21,9 @@
     <properties>
         <kotlin-version>1.4.32</kotlin-version>
         <kotlin-logging.version>1.12.5</kotlin-logging.version>
-        <aws-sdk-version>2.16.59</aws-sdk-version>
-        <junit-version>5.7.1</junit-version>
-        <quantummaid-version>1.0.104</quantummaid-version>
+        <aws-sdk-version>2.16.68</aws-sdk-version>
+        <junit-version>5.7.2</junit-version>
+        <quantummaid-version>1.0.105</quantummaid-version>
         <mapmaid-version>0.9.100</mapmaid-version>
         <maven-surfire-plugin-version>3.0.0-M5</maven-surfire-plugin-version>
         <jvm-target-version>1.8</jvm-target-version>

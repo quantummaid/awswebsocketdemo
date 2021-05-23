@@ -5,8 +5,10 @@ import de.quantummaid.httpmaid.HttpMaidBuilder
 import de.quantummaid.httpmaid.mapmaid.MapMaidConfigurators.toConfigureMapMaidUsingRecipe
 import de.quantummaid.httpmaid.websockets.criteria.WebsocketCriteria.websocketCriteria
 import de.quantummaid.mapmaid.mapper.deserialization.validation.ValidationError
+import de.quantummaid.reflectmaid.ReflectMaid
 
 fun configureHttpMaid(builder: HttpMaidBuilder) {
+    ReflectMaid
     builder
             .post("/disconnect_everyone") { request, _ ->
                 request.websockets().disconnector().disconnectAll()
