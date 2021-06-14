@@ -23,7 +23,7 @@
         <kotlin-logging.version>1.12.5</kotlin-logging.version>
         <aws-sdk-version>2.16.78</aws-sdk-version>
         <junit-version>5.7.2</junit-version>
-        <quantummaid-version>1.0.106</quantummaid-version>
+        <quantummaid-version>1.0.107</quantummaid-version>
         <mapmaid-version>0.9.100</mapmaid-version>
         <maven-surfire-plugin-version>3.0.0-M5</maven-surfire-plugin-version>
         <jvm-target-version>1.8</jvm-target-version>
