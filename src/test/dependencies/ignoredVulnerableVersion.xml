@@ -56,4 +56,11 @@
         <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy\-json@.*$</packageUrl>
         <cpe>cpe:/a:apache:groovy</cpe>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+   file name: httpmaid-awslambda-websocket-0.9.142.jar
+   ]]></notes>
+        <packageUrl regex="true">^pkg:maven/de\.quantummaid\.httpmaid\.integrations/httpmaid\-awslambda\-websocket@.*$</packageUrl>
+        <cve>CVE-2021-33880</cve>
+    </suppress>
 </suppressions>
