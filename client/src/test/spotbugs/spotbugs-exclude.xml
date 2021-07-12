@@ -30,4 +30,7 @@
     <Match>
         <Bug pattern="URF_UNREAD_FIELD"/>
     </Match>
+    <Match>
+        <Bug pattern="NP_ALWAYS_NULL"/>
+    </Match>
 </FindBugsFilter>

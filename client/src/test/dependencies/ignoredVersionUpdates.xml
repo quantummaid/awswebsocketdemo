@@ -13,11 +13,6 @@
                 <ignoreVersion type="regex">2\..*</ignoreVersion>
             </ignoreVersions>
         </rule>
-        <rule groupId="org.jetbrains.kotlin">
-            <ignoreVersions>
-                <ignoreVersion type="regex">1\.5\..*</ignoreVersion>
-            </ignoreVersions>
-        </rule>
         <rule groupId="org.eclipse.jetty">
             <ignoreVersions>
                 <ignoreVersion type="regex">11\..*</ignoreVersion>

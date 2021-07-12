@@ -12,7 +12,7 @@
     <version>0.1</version>
 
     <properties>
-        <kotlin-version>1.4.32</kotlin-version>
+        <kotlin-version>1.5.20</kotlin-version>
         <kotlin-logging.version>1.12.5</kotlin-logging.version>
         <dependency-update-file-checksum>42f33b16b7099885cd5becc23c104f35</dependency-update-file-checksum>
         <plugin-update-file-checksum>a9c106f16f2d959e2db68534062e7623</plugin-update-file-checksum>
@@ -26,37 +26,37 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.30</version>
+                <version>1.7.31</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-io</artifactId>
-                <version>9.4.42.v20210604</version>
+                <version>9.4.43.v20210629</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-util</artifactId>
-                <version>9.4.42.v20210604</version>
+                <version>9.4.43.v20210629</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-http</artifactId>
-                <version>9.4.42.v20210604</version>
+                <version>9.4.43.v20210629</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty.websocket</groupId>
                 <artifactId>websocket-client</artifactId>
-                <version>9.4.42.v20210604</version>
+                <version>9.4.43.v20210629</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty.websocket</groupId>
                 <artifactId>websocket-common</artifactId>
-                <version>9.4.42.v20210604</version>
+                <version>9.4.43.v20210629</version>
             </dependency>
             <dependency>
                 <groupId>org.eclipse.jetty.websocket</groupId>
                 <artifactId>websocket-api</artifactId>
-                <version>9.4.42.v20210604</version>
+                <version>9.4.43.v20210629</version>
             </dependency>
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
