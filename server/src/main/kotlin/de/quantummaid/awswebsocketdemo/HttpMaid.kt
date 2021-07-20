@@ -2,7 +2,7 @@ package de.quantummaid.awswebsocketdemo
 
 import de.quantummaid.awswebsocketdemo.usecases.*
 import de.quantummaid.httpmaid.HttpMaidBuilder
-import de.quantummaid.httpmaid.mapmaid.MapMaidConfigurators.toConfigureMapMaidUsingRecipe
+import de.quantummaid.httpmaid.usecases.UseCaseConfigurators.withMapperConfiguration
 import de.quantummaid.httpmaid.websockets.criteria.WebsocketCriteria.websocketCriteria
 import de.quantummaid.mapmaid.mapper.deserialization.validation.ValidationError
 import de.quantummaid.reflectmaid.ReflectMaid
@@ -36,7 +36,7 @@ fun configureHttpMaid(builder: HttpMaidBuilder) {
                     }
                 }
             }
-            .configured(toConfigureMapMaidUsingRecipe {
+            .configured(withMapperConfiguration {
                 it.withExceptionIndicatingMultipleValidationErrors(ValidationException::class.java) { exception, path ->
                     exception.messages.map { ValidationError.fromStringMessageAndPropertyPath(it, path) }
                 }
